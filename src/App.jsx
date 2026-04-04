@@ -769,7 +769,7 @@ function Memories({ onSave }) {
     if(!ph) { setCaptioning(null); return; }
     try {
       const b64 = ph.url.split(",")[1], mt = ph.url.split(";")[0].split(":")[1];
-      const res = await fetch("https://api.anthropic.com/v1/messages",{
+      const res = await fetch("/api/suggest",{
         method:"POST", headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
           model:"claude-sonnet-4-20250514", max_tokens:100,
@@ -796,7 +796,7 @@ function Memories({ onSave }) {
     }
     setAiLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages",{
+      const res = await fetch("/api/suggest",{
         method:"POST", headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
           model:"claude-sonnet-4-20250514", max_tokens:700,
@@ -1261,7 +1261,7 @@ function AISuggestions({ memoriesData }) {
     // Step 1: check if fetch works at all in this environment
     let fetchWorks = false;
     try {
-      const ping = await fetch("https://api.anthropic.com/v1/messages", {
+      const ping = await fetch("/api/suggest", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:10, messages:[{role:"user",content:"hi"}] })
       });
@@ -1269,7 +1269,7 @@ function AISuggestions({ memoriesData }) {
       const pingData = await ping.json();
 
       // Step 2: if ping worked, do the real call
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/suggest", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
           model:"claude-sonnet-4-20250514", max_tokens:1200,
