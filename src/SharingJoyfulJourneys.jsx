@@ -2,22 +2,10 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 // ─── DESIGN TOKENS ────────────────────────────────────────────────────────────
 const C = {
-  sand:"#F5E6C8", terracotta:"#C4623A", sage:"#7A9E7E",
-  sky:"#5B8DB8", plum:"#7B5C8A", gold:"#D4A843",
-  cream:"#FDFAF4", dark:"#2C2416", muted:"#8C7B65",
+  sand:"#F0DDB8", terracotta:"#E8643C", sage:"#3A8C6E",
+  sky:"#2B7A8C", plum:"#1E5472", gold:"#F5B942",
+  cream:"#F5F9FA", dark:"#1A2E38", muted:"#6B8590",
 };
-
-const NAV = [
-  { id:"bucketlist", label:"Bucket List", icon:"✦", color:C.terracotta },
-  { id:"planner",    label:"Planner",     icon:"◈", color:C.sky },
-  { id:"memories",   label:"Memories",   icon:"❋", color:C.sage },
-  { id:"youtube",    label:"SJJ Studio", icon:"▶", color:C.plum },
-  { id:"aisuggest",  label:"AI Suggest", icon:"✧", color:C.gold },
-];
-
-const REGIONS = ["All","Palm Springs & Desert","SoCal Coast","Los Angeles","Central Coast","Bay Area","NorCal","Sierra Nevada"];
-const VIBES   = ["Hidden Gem","Scenic Drive","Foodie","Beach","Mountain","Culture","Wine","Adventure"];
-const SEASONS = { Spring:"🌸", Summer:"☀️", Fall:"🍂", Winter:"❄️" };
 
 // ─── SEED DATA ────────────────────────────────────────────────────────────────
 const SEED_BUCKET = [
@@ -182,17 +170,17 @@ const Card = ({ children, style={} }) => (
 const Inp = ({ style={}, ...p }) => (
   <input style={{ width:"100%", boxSizing:"border-box", padding:"10px 14px", marginBottom:10,
     border:`1px solid ${C.sand}`, borderRadius:10, fontSize:13, fontFamily:"Georgia,serif",
-    color:C.dark, background:"#FEFCF8", outline:"none", ...style }} {...p} />
+    color:C.dark, background:"#F7FBFC", outline:"none", ...style }} {...p} />
 );
 const TA = ({ style={}, ...p }) => (
   <textarea style={{ width:"100%", boxSizing:"border-box", padding:"10px 14px", marginBottom:10,
     border:`1px solid ${C.sand}`, borderRadius:10, fontSize:13, fontFamily:"Georgia,serif",
-    color:C.dark, background:"#FEFCF8", outline:"none", resize:"vertical", ...style }} {...p} />
+    color:C.dark, background:"#F7FBFC", outline:"none", resize:"vertical", ...style }} {...p} />
 );
 const Sel = ({ opts, style={}, ...p }) => (
   <select style={{ width:"100%", boxSizing:"border-box", padding:"10px 14px", marginBottom:10,
     border:`1px solid ${C.sand}`, borderRadius:10, fontSize:13, fontFamily:"Georgia,serif",
-    color:C.dark, background:"#FEFCF8", outline:"none", ...style }} {...p}>
+    color:C.dark, background:"#F7FBFC", outline:"none", ...style }} {...p}>
     {opts.map(o => <option key={o}>{o}</option>)}
   </select>
 );
@@ -250,9 +238,9 @@ function CAMap({ items=[] }) {
   const proj = (lat,lng) => ({ x:((lng+124.4)/(124.4-114.1))*W, y:H-((lat-32.5)/(42-32.5))*H });
   const ps = proj(33.83,-116.54);
   return (
-    <div style={{ background:"#EAF2EC", borderRadius:16, border:`1px solid ${C.sage}44`, overflow:"hidden", maxWidth:340, margin:"0 auto 20px" }}>
+    <div style={{ background:"#DFF0F3", borderRadius:16, border:`1px solid ${C.sage}44`, overflow:"hidden", maxWidth:340, margin:"0 auto 20px" }}>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width:"100%", display:"block" }}>
-        <polygon points="75,8 255,28 305,118 315,198 285,338 235,398 95,408 35,378 15,278 25,148 45,78" fill="#D6E8D2" stroke="#7A9E7E" strokeWidth="2"/>
+        <polygon points="75,8 255,28 305,118 315,198 285,338 235,398 95,408 35,378 15,278 25,148 45,78" fill="#C8E8EE" stroke="#7A9E7E" strokeWidth="2"/>
         {[0.25,0.5,0.75].map(t=>(
           <g key={t}>
             <line x1={0} y1={H*t} x2={W} y2={H*t} stroke="#7A9E7E" strokeWidth="0.5" strokeDasharray="4,6" opacity="0.4"/>
@@ -369,7 +357,7 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
 
       {/* Add form */}
       {showAdd && (
-        <Card style={{border:`2px dashed ${C.terracotta}55`,background:"#FEF9F5"}}>
+        <Card style={{border:`2px dashed ${C.terracotta}55`,background:"#FDF7F2"}}>
           <div style={{display:"flex",gap:6,marginBottom:14}}>
             {[["✏️ Manual",false],["✧ AI Fill-in",true]].map(([label,val])=>(
               <button key={label} onClick={()=>setAiMode(val)} style={{flex:1,padding:"10px",borderRadius:8,
@@ -390,7 +378,7 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
                 onChange={e=>{ aiDescRef.current = e.target.value; }}
                 style={{width:"100%",boxSizing:"border-box",padding:"12px 14px",marginBottom:12,
                   border:`2px solid ${C.terracotta}44`,borderRadius:10,fontSize:14,fontFamily:"Georgia,serif",
-                  color:C.dark,background:"#FEFCF8",outline:"none",resize:"vertical",
+                  color:C.dark,background:"#F7FBFC",outline:"none",resize:"vertical",
                   WebkitAppearance:"none",touchAction:"manipulation",lineHeight:1.6}}
               />
               {aiLoading ? <Spin label="AI is filling in the details…"/> : (
@@ -587,7 +575,7 @@ function TripPlanner({ onSave }) {
 
       {/* Add / Edit form */}
       {showAdd && (
-        <Card style={{border:`2px dashed ${C.sky}55`,background:"#F5F9FD"}}>
+        <Card style={{border:`2px dashed ${C.sky}55`,background:"#EEF5F7"}}>
           <h4 style={{fontFamily:"'Playfair Display',serif",color:C.sky,marginTop:0}}>
             {editingId ? "✏️ Edit Trip" : "◈ Plan a New Trip"}
           </h4>
@@ -940,7 +928,7 @@ Return ONLY valid JSON (no markdown): name, date (approx), region (one of: Palm 
 
       {/* Add / Edit form */}
       {showAdd && (
-        <Card style={{border:`2px dashed ${C.sage}55`,background:"#F5FAF6"}}>
+        <Card style={{border:`2px dashed ${C.sage}55`,background:"#EEF7F2"}}>
           <h4 style={{fontFamily:"'Playfair Display',serif",color:C.sage,marginTop:0,marginBottom:14}}>
             {editingId ? "✏️ Edit Memory" : "❋ Add New Memory"}
           </h4>
@@ -968,7 +956,7 @@ Return ONLY valid JSON (no markdown): name, date (approx), region (one of: Palm 
                 onChange={e=>{ aiDescRef.current = e.target.value; }}
                 style={{width:"100%",boxSizing:"border-box",padding:"12px 14px",marginBottom:12,
                   border:`2px solid ${C.sage}55`,borderRadius:10,fontSize:14,fontFamily:"Georgia,serif",
-                  color:C.dark,background:"#FEFCF8",outline:"none",resize:"vertical",
+                  color:C.dark,background:"#F7FBFC",outline:"none",resize:"vertical",
                   WebkitAppearance:"none",touchAction:"manipulation",lineHeight:1.6}}
               />
               {aiLoading ? <Spin label="Building your memory…"/> : (
@@ -1008,7 +996,7 @@ Return ONLY valid JSON (no markdown): name, date (approx), region (one of: Palm 
           )}
 
           {/* ── Photo Upload Section ── */}
-          <div style={{marginTop:12,marginBottom:12,padding:12,background:"#F0FAF2",borderRadius:12,border:`1px solid ${C.sage}33`}}>
+          <div style={{marginTop:12,marginBottom:12,padding:12,background:"#EBF7F5",borderRadius:12,border:`1px solid ${C.sage}33`}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
               <span style={{fontSize:12,color:C.sage,fontFamily:"'Playfair Display',serif",fontWeight:600}}>📸 Photos</span>
               <span style={{fontSize:10,color:C.muted,fontFamily:"Georgia,serif"}}>Auto-compressed for storage</span>
@@ -1209,7 +1197,7 @@ function YouTubeStudio({ onSave }) {
         ))}
       </div>
       {showAdd && (
-        <Card style={{border:`2px dashed ${C.plum}55`,background:"#F9F5FD"}}>
+        <Card style={{border:`2px dashed ${C.plum}55`,background:"#F0F4F8"}}>
           <Inp value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="Video title or concept…"/>
           <div style={{display:"flex",gap:8}}>
             <Sel opts={["Idea","In Production","Published"]} value={form.status} onChange={e=>setForm(f=>({...f,status:e.target.value}))} style={{flex:1,margin:"0 0 10px"}}/>
@@ -1313,7 +1301,7 @@ Respond with ONLY a JSON array — no markdown, no explanation, no backticks. Th
         <p style={{color:C.muted,fontSize:13,margin:"4px 0 0",fontFamily:"Georgia,serif"}}>Personalized picks based on what you've loved ✧</p>
       </div>
 
-      <Card style={{background:"linear-gradient(135deg,#FEF9F0,#F5F0E8)",border:`1px solid ${C.gold}44`}}>
+      <Card style={{background:"linear-gradient(135deg,#FDF8EE,#EDF5F7)",border:`1px solid ${C.gold}44`}}>
         <h4 style={{fontFamily:"'Playfair Display',serif",color:C.gold,marginTop:0,marginBottom:14}}>✧ What are you looking for?</h4>
 
         <div style={{marginBottom:12}}>
@@ -1416,7 +1404,7 @@ export default function App() {
   }, []);
 
   return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(135deg,#F7F0E3 0%,#EDE0C8 50%,#F0E8D5 100%)",fontFamily:"Georgia,serif"}}>
+    <div style={{minHeight:"100vh",background:"linear-gradient(135deg,#EEF6F8 0%,#DFF0F3 50%,#E8F3F5 100%)",fontFamily:"Georgia,serif"}}>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet"/>
 
       {/* Header */}
@@ -1427,7 +1415,7 @@ export default function App() {
             <span style={{fontSize:19,color:C.gold}}>✦</span>
             <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:19,color:C.sand,margin:0,letterSpacing:"0.02em"}}>Sharing Joyful Journeys</h1>
           </div>
-          <p style={{color:C.muted,fontSize:10,margin:"2px 0 0",letterSpacing:"0.15em",textTransform:"uppercase"}}>Paul & Our California Adventures</p>
+          <p style={{color:C.muted,fontSize:10,margin:"2px 0 0",letterSpacing:"0.15em",textTransform:"uppercase"}}>Our California Adventures</p>
         </div>
         <div style={{textAlign:"right"}}>
           <div style={{fontSize:9,color:C.muted,letterSpacing:"0.1em"}}>HOME BASE</div>
