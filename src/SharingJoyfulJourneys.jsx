@@ -1431,7 +1431,7 @@ export default function App() {
         </div>
         <div style={{textAlign:"right"}}>
           <div style={{fontSize:9,color:C.muted,letterSpacing:"0.1em"}}>HOME BASE</div>
-          <div style={{fontSize:12,color:C.gold,fontFamily:"'Playfair Display',serif"}}>Palm Springs · 2027 🌴</div>
+          <div style={{fontSize:12,color:C.gold,fontFamily:"'Playfair Display',serif"}}>Palm Springs 🌴</div>
         </div>
       </div>
 
