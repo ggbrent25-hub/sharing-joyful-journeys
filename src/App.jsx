@@ -1242,12 +1242,13 @@ function YouTubeStudio({ onSave }) {
 }
 
 // ─── AI SUGGESTIONS ───────────────────────────────────────────────────────────
-function AISuggestions({ memoriesData }) {
+function AISuggestions({ memoriesData, onAddToBucket, onAddToPlanner }) {
   const [loading, setLoading]     = useState(false);
   const [suggestions, setSuggestions] = useState(null);
   const [error, setError]         = useState(null);
   const [season, setSeason]       = useState("Fall");
   const [vibe, setVibe]           = useState("Mountain");
+  const [saved, setSaved]         = useState({});
 
   const go = async () => {
     setLoading(true);
@@ -1385,21 +1386,41 @@ Respond with ONLY a JSON array — no markdown, no explanation, no backticks. Th
       </Card>
 
       {suggestions && suggestions.map((s,i)=>(
-        <Card key={i} style={{borderLeft:`4px solid ${[C.terracotta,C.sage,C.sky][i%3]}`}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:4}}>
-            <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:19,color:C.dark,margin:0,flex:1,paddingRight:8}}>{s.name}</h3>
-            {s.hiddenGem&&<Tag label="💎 Hidden Gem" color={C.plum}/>}
-          </div>
-          <p style={{color:C.muted,fontSize:12,fontFamily:"Georgia,serif",margin:"0 0 8px"}}>
-            📍 {s.region} · 🚗 {s.driveFromPalmSprings} from Palm Springs
-          </p>
-          <p style={{color:C.dark,fontSize:14,fontFamily:"Georgia,serif",margin:"0 0 10px",lineHeight:1.7}}>{s.why}</p>
-          <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
-            {s.bestTime&&<Tag label={`🌸 Best: ${s.bestTime}`} color={C.sage}/>}
-            {s.youtubeAngle&&<Tag label={`▶ ${s.youtubeAngle}`} color={C.plum}/>}
-          </div>
-        </Card>
-      ))}
+    <Card key={i} style={{borderLeft:`4px solid ${[C.terracotta,C.sage,C.sky][i%3]}`}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:4}}>
+        <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:19,color:C.dark,margin:0,flex:1,paddingRight:8}}>{s.name}</h3>
+        {s.hiddenGem&&<Tag label="💎 Hidden Gem" color={C.plum}/>}
+      </div>
+      <p style={{color:C.muted,fontSize:12,fontFamily:"Georgia,serif",margin:"0 0 8px"}}>
+        📍 {s.region} · 🚗 {s.driveFromPalmSprings} from Palm Springs
+      </p>
+      <p style={{color:C.dark,fontSize:14,fontFamily:"Georgia,serif",margin:"0 0 10px",lineHeight:1.7}}>{s.why}</p>
+      <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:12}}>
+        {s.bestTime&&<Tag label={`🌸 Best: ${s.bestTime}`} color={C.sage}/>}
+        {s.youtubeAngle&&<Tag label={`▶ ${s.youtubeAngle}`} color={C.plum}/>}
+      </div>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+        <button
+          onClick={()=>{ onAddToBucket && onAddToBucket(s); setSaved(sv=>({...sv,[i+"b"]:true})); }}
+          disabled={saved[i+"b"]}
+          style={{flex:1,padding:"9px 10px",borderRadius:9,border:"none",
+            background:saved[i+"b"]?C.sage:C.terracotta,color:"#fff",
+            fontFamily:"'Playfair Display',serif",fontSize:12,cursor:saved[i+"b"]?"default":"pointer",
+            boxShadow:saved[i+"b"]?"none":`0 3px 10px ${C.terracotta}44`,touchAction:"manipulation"}}>
+          {saved[i+"b"] ? "✓ In Bucket List" : "✦ Add to Bucket List"}
+        </button>
+        <button
+          onClick={()=>{ onAddToPlanner && onAddToPlanner(s); setSaved(sv=>({...sv,[i+"p"]:true})); }}
+          disabled={saved[i+"p"]}
+          style={{flex:1,padding:"9px 10px",borderRadius:9,border:"none",
+            background:saved[i+"p"]?C.sage:C.sky,color:"#fff",
+            fontFamily:"'Playfair Display',serif",fontSize:12,cursor:saved[i+"p"]?"default":"pointer",
+            boxShadow:saved[i+"p"]?"none":`0 3px 10px ${C.sky}44`,touchAction:"manipulation"}}>
+          {saved[i+"p"] ? "✓ In Planner" : "◈ Add to Planner"}
+        </button>
+      </div>
+    </Card>
+  ))}
     </div>
   );
 }
@@ -1409,11 +1430,47 @@ export default function App() {
   const [active, setActive] = useState("bucketlist");
   const [saveState, setSaveState] = useState("idle");
   const [memoriesData] = useStored("sjj-memories", SEED_MEMORIES);
+  const [bucketData, saveBucketData] = useStored("sjj-bucket", SEED_BUCKET);
+  const [tripsData, saveTripsData] = useStored("sjj-trips", SEED_TRIPS);
 
   const onSave = useCallback((state) => {
     setSaveState(state);
     if(state==="saved") setTimeout(()=>setSaveState("idle"), 2500);
   }, []);
+
+  const addToBucket = useCallback(async (s) => {
+    if(!bucketData) return;
+    onSave("saving");
+    const newItem = {
+      id: `b${Date.now()}`,
+      name: s.name,
+      region: s.region || "Palm Springs & Desert",
+      vibes: [],
+      notes: s.why || "",
+      priority: "Next Up",
+      bestSeason: "Spring",
+      lat: null, lng: null,
+      youtubeAngle: s.youtubeAngle || ""
+    };
+    await saveBucketData([...bucketData, newItem]);
+    onSave("saved");
+  }, [bucketData, saveBucketData, onSave]);
+
+  const addToPlanner = useCallback(async (s) => {
+    if(!tripsData) return;
+    onSave("saving");
+    const newTrip = {
+      id: `t${Date.now()}`,
+      name: s.name,
+      destination: s.region || "",
+      dates: s.bestTime || "",
+      days: "",
+      status: "Planning",
+      notes: s.why || ""
+    };
+    await saveTripsData([...tripsData, newTrip]);
+    onSave("saved");
+  }, [tripsData, saveTripsData, onSave]);
 
   return (
     <div style={{minHeight:"100vh",background:"linear-gradient(135deg,#F7F0E3 0%,#EDE0C8 50%,#F0E8D5 100%)",fontFamily:"Georgia,serif"}}>
@@ -1456,7 +1513,7 @@ export default function App() {
         {active==="planner"    && <TripPlanner onSave={onSave}/>}
         {active==="memories"   && <Memories onSave={onSave}/>}
         {active==="youtube"    && <YouTubeStudio onSave={onSave}/>}
-        {active==="aisuggest"  && <AISuggestions memoriesData={memoriesData||[]}/>}
+        {active==="aisuggest"  && <AISuggestions memoriesData={memoriesData||[]} onAddToBucket={addToBucket} onAddToPlanner={addToPlanner}/>}
       </div>
 
       <SaveBadge state={saveState}/>
