@@ -7,6 +7,18 @@ const C = {
   cream:"#F5F9FA", dark:"#1A2E38", muted:"#6B8590",
 };
 
+const NAV = [
+  { id:"bucketlist", label:"Bucket List", icon:"✦", color:C.terracotta },
+  { id:"planner",    label:"Planner",     icon:"◈", color:C.sky },
+  { id:"memories",   label:"Memories",   icon:"❋", color:C.sage },
+  { id:"youtube",    label:"SJJ Studio", icon:"▶", color:C.plum },
+  { id:"aisuggest",  label:"AI Suggest", icon:"✧", color:C.gold },
+];
+
+const REGIONS = ["All","Palm Springs & Desert","SoCal Coast","Los Angeles","Central Coast","Bay Area","NorCal","Sierra Nevada"];
+const VIBES   = ["Hidden Gem","Scenic Drive","Foodie","Beach","Mountain","Culture","Wine","Adventure"];
+const SEASONS = { Spring:"🌸", Summer:"☀️", Fall:"🍂", Winter:"❄️" };
+
 // ─── SEED DATA ────────────────────────────────────────────────────────────────
 const SEED_BUCKET = [
   { id:"b1", name:"Big Sur Coastal Drive",  region:"Central Coast",          vibes:["Scenic Drive","Beach"],     priority:"Dream Trip", notes:"Highway 1 in spring — wildflowers! Post Ranch Inn?",      bestSeason:"Spring", lat:36.270, lng:-121.807, youtubeAngle:"Iconic cinematic coastal drive perfect for SJJ" },
