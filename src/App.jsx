@@ -1272,6 +1272,7 @@ function AISuggestions({ memoriesData, onAddToBucket, onAddToPlanner }) {
   const [error, setError]         = useState(null);
   const [season, setSeason]       = useState("Fall");
   const [vibe, setVibe]           = useState("Mountain");
+  const [region, setRegion]       = useState("Anywhere");
   const [saved, setSaved]         = useState({});
 
   const go = async () => {
@@ -1300,7 +1301,7 @@ function AISuggestions({ memoriesData, onAddToBucket, onAddToPlanner }) {
           model:"claude-sonnet-4-20250514", max_tokens:1200,
           system:`You are a California travel expert for a couple moving to Palm Springs in 2027. They love hidden gems, coastal spots, mountains, food & wine, culture. Their YouTube channel is "Sharing Joyful Journeys". Always prioritize under-the-radar places over tourist traps, seasonal timing, and YouTube content potential.
 Respond with ONLY a JSON array — no markdown, no explanation, no backticks. The array must contain exactly 3 objects. Each object must have these exact keys: name (string), region (string), why (string, 1-2 sentences), bestTime (string), hiddenGem (boolean), youtubeAngle (string), driveFromPalmSprings (string like "2.5 hours").`,
-          messages:[{ role:"user", content:`Trips they've loved:\n${ctx||"No past trips yet — use their preferences."}\n\nSuggest 3 California destinations ideal for ${season} with a "${vibe}" vibe. Focus on places most tourists miss.` }]
+          messages:[{ role:"user", content:`Trips they've loved:\n${ctx||"No past trips yet — use their preferences."}\n\nSuggest 3 California destinations ideal for ${season} with a "${vibe}" vibe${region!=="Anywhere"?` specifically in or near the ${region} area`:""}. Focus on places most tourists miss.` }]
         })
       });
 
@@ -1371,10 +1372,28 @@ Respond with ONLY a JSON array — no markdown, no explanation, no backticks. Th
           </div>
         </div>
 
+        {/* Region filter */}
+        <div style={{marginBottom:18}}>
+          <div style={{fontSize:11,color:C.muted,fontFamily:"Georgia,serif",marginBottom:6}}>Area of California</div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+            {["Anywhere","Palm Springs & Desert","SoCal Coast","Los Angeles","Central Coast","Bay Area","NorCal","Sierra Nevada"].map(r=>(
+              <button key={r} onClick={()=>setRegion(r)}
+                style={{padding:"7px 13px",borderRadius:20,
+                  border:`1px solid ${region===r?C.sage:C.sand}`,
+                  background:region===r?C.sage:"transparent",
+                  color:region===r?"#fff":C.muted,
+                  fontFamily:"Georgia,serif",fontSize:12,
+                  cursor:"pointer",touchAction:"manipulation"}}>
+                {r}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Selected choices confirmation */}
         <div style={{marginBottom:14,padding:"8px 12px",background:"rgba(212,168,67,0.1)",borderRadius:8,
           fontFamily:"Georgia,serif",fontSize:12,color:C.muted}}>
-          Looking for: <strong style={{color:C.dark}}>{season}</strong> · <strong style={{color:C.dark}}>{vibe}</strong>
+          Looking for: <strong style={{color:C.dark}}>{season}</strong> · <strong style={{color:C.dark}}>{vibe}</strong>{region!=="Anywhere"&&<> · <strong style={{color:C.dark}}>{region}</strong></>}
         </div>
 
         {loading ? (
