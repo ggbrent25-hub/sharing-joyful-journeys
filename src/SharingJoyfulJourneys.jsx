@@ -51,7 +51,7 @@ function compressImage(file) {
       const img = new Image();
       img.onload = () => {
         try {
-          const MAX = 900;
+          const MAX = 800; // Keep images under 2000px Claude API limit
           const scale = Math.min(1, MAX / Math.max(img.width, img.height));
           const w = Math.round(img.width * scale);
           const h = Math.round(img.height * scale);
@@ -60,7 +60,7 @@ function compressImage(file) {
           canvas.height = h;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, w, h);
-          const compressed = canvas.toDataURL("image/jpeg", 0.75);
+          const compressed = canvas.toDataURL("image/jpeg", 0.60);
           // Sanity check — if result is tiny something went wrong, use original
           resolve(compressed.length > 1000 ? compressed : dataUrl);
         } catch {
@@ -768,7 +768,10 @@ function Memories({ onSave }) {
     const ph = formPhotos.find(p=>p.tempId===tempId);
     if(!ph) { setCaptioning(null); return; }
     try {
-      const b64 = ph.url.split(",")[1], mt = ph.url.split(";")[0].split(":")[1];
+      // Re-compress to stay under 2000px Claude API limit before sending
+    const captionUrl = await compressImage(new File([await (await fetch(ph.url)).blob()], "photo.jpg", {type:"image/jpeg"}));
+    const safeUrl = captionUrl || ph.url;
+    const b64 = safeUrl.split(",")[1], mt = safeUrl.split(";")[0].split(":")[1];
       const res = await fetch("https://api.anthropic.com/v1/messages",{
         method:"POST", headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
