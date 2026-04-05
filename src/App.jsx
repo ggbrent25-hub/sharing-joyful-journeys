@@ -477,7 +477,7 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
                 const updated=[...existing,trip];
                 localStorage.setItem("sjj_sjj-trips",JSON.stringify(updated));
                 try{await window.storage.set("sjj-trips",JSON.stringify(updated));}catch{}
-                onSave("saved");
+                await remove(item.id);
               }}
               style={{flex:2,padding:"8px",background:C.sky+"11",border:`1px solid ${C.sky}66`,
               borderRadius:8,color:C.sky,fontFamily:"'Playfair Display',serif",fontSize:12,
