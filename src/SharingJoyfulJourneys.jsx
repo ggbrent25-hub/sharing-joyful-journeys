@@ -443,7 +443,7 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
       )}
 
       {/* List */}
-      {view==="list" && (items||[]).map(item=>(
+      {view==="list" && (filtered||[]).map(item=>(
         <Card key={item.id}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
             <div style={{flex:1}}>
