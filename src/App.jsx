@@ -40,19 +40,22 @@ const SEED_YOUTUBE = [
 ];
 
 // ─── PHOTO COMPRESSION ────────────────────────────────────────────────────────
-// Uses FileReader → Image → Canvas pipeline with explicit iPad Safari support.
+// MAX_DIMENSION: longest edge cap (px). MAX_SIZE_BYTES: output byte cap.
+// Pipeline: FileReader → Image → Canvas → iterative quality reduction.
 // Falls back to raw base64 if canvas fails — guarantees a result either way.
+const MAX_DIMENSION = 1920; // cap longest edge at 1920 px (Full HD)
+const MAX_SIZE_BYTES = 512 * 1024; // 512 KB output cap
+
 function compressImage(file) {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = (ev) => {
       const dataUrl = ev.target.result;
-      // Try canvas compression
       const img = new Image();
       img.onload = () => {
         try {
-          const MAX = 900;
-          const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+          // ── Step 1: Resize so the longest edge ≤ MAX_DIMENSION ──────────────
+          const scale = Math.min(1, MAX_DIMENSION / Math.max(img.width, img.height));
           const w = Math.round(img.width * scale);
           const h = Math.round(img.height * scale);
           const canvas = document.createElement("canvas");
@@ -60,8 +63,17 @@ function compressImage(file) {
           canvas.height = h;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, w, h);
-          const compressed = canvas.toDataURL("image/jpeg", 0.75);
-          // Sanity check — if result is tiny something went wrong, use original
+
+          // ── Step 2: Iteratively reduce JPEG quality until ≤ MAX_SIZE_BYTES ──
+          let quality = 0.82;
+          let compressed = canvas.toDataURL("image/jpeg", quality);
+          // Each base64 char ≈ 0.75 bytes; approximate the byte size
+          while (compressed.length * 0.75 > MAX_SIZE_BYTES && quality > 0.25) {
+            quality = Math.round((quality - 0.08) * 100) / 100;
+            compressed = canvas.toDataURL("image/jpeg", quality);
+          }
+
+          // ── Step 3: Sanity-check — if result is suspiciously tiny, use raw ──
           resolve(compressed.length > 1000 ? compressed : dataUrl);
         } catch {
           resolve(dataUrl); // Canvas failed — use raw
@@ -792,7 +804,24 @@ function Memories({ onSave }) {
     const ph = formPhotos.find(p=>p.tempId===tempId);
     if(!ph) { setCaptioning(null); return; }
     try {
-      const b64 = ph.url.split(",")[1], mt = ph.url.split(";")[0].split(":")[1];
+      // Downsize to ≤ MAX_AI_DIMENSION before sending to AI (saves API bandwidth)
+      const MAX_AI_DIMENSION = 768;
+      const aiUrl = await new Promise((res) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const scale = Math.min(1, MAX_AI_DIMENSION / Math.max(img.width, img.height));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.round(img.width * scale);
+            canvas.height = Math.round(img.height * scale);
+            canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+            res(canvas.toDataURL("image/jpeg", 0.80));
+          } catch { res(ph.url); }
+        };
+        img.onerror = () => res(ph.url);
+        img.src = ph.url;
+      });
+      const b64 = aiUrl.split(",")[1], mt = "image/jpeg";
       const res = await fetch("/api/suggest",{
         method:"POST", headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
@@ -1542,7 +1571,7 @@ export default function App() {
       {/* Content */}
       <div style={{maxWidth:680,margin:"0 auto",padding:"20px 13px 80px"}}>
         {active==="bucketlist" && <BucketList onSave={onSave}/>}
-        {active==="planner"    && <TripPlanner onSave={onSave}/>}
+        {active==="planner"    && <TripPlanner onSav={onSave}/>}
         {active==="memories"   && <Memories onSave={onSave}/>}
         {active==="youtube"    && <YouTubeStudio onSave={onSave}/>}
         {active==="aisuggest"  && <AISuggestions memoriesData={memoriesData||[]} onAddToBucket={addToBucket} onAddToPlanner={addToPlanner}/>}
