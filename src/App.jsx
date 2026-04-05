@@ -300,6 +300,7 @@ function BucketList({ onSave }) {
   const aiDescRef = useRef("");
   const blank = { name:"", region:REGIONS[1], vibes:[], notes:"", priority:"Next Up", bestSeason:"Spring", lat:null, lng:null, youtubeAngle:"" };
   const [form, setForm] = useState(blank);
+  const [editingId, setEditingId] = useState(null);
 
   const filtered = !items ? [] : filter==="All" ? items : items.filter(i=>i.region===filter);
   const toggleVibe = v => setForm(f=>({ ...f, vibes:f.vibes.includes(v)?f.vibes.filter(x=>x!==v):[...f.vibes,v] }));
@@ -330,8 +331,12 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
   const doSave = async () => {
     if(!form.name.trim()||!items) return;
     onSave("saving");
-    await saveItems([...items, {...form, id:`b${Date.now()}`}]);
-    setForm(blank); setShowAdd(false); aiDescRef.current=""; onSave("saved");
+    if(editingId) {
+      await saveItems(items.map(i => i.id===editingId ? {...form, id:editingId} : i));
+    } else {
+      await saveItems([...items, {...form, id:`b${Date.now()}`}]);
+    }
+    setForm(blank); setEditingId(null); setShowAdd(false); aiDescRef.current=""; onSave("saved");
   };
   const remove = async (id) => { onSave("saving"); await saveItems(items.filter(i=>i.id!==id)); onSave("saved"); };
 
@@ -436,8 +441,8 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
             </>
           )}
           <div style={{display:"flex",gap:8,justifyContent:"flex-end",marginTop:10}}>
-            <Ghost onClick={()=>{setShowAdd(false);aiDescRef.current="";setForm(blank);}}>Cancel</Ghost>
-            {form.name && <Btn onClick={doSave}>Save ✦</Btn>}
+            <Ghost onClick={()=>{setShowAdd(false);setEditingId(null);aiDescRef.current="";setForm(blank);}}>Cancel</Ghost>
+            {form.name && <Btn onClick={doSave}>{editingId ? "Update ✦" : "Save ✦"}</Btn>}
           </div>
         </Card>
       )}
@@ -458,6 +463,25 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
               {item.youtubeAngle&&<p style={{color:C.plum,fontSize:12,fontFamily:"Georgia,serif",margin:0}}>▶ {item.youtubeAngle}</p>}
             </div>
             <button onClick={()=>remove(item.id)} style={{background:"transparent",border:"none",color:C.muted,fontSize:18,cursor:"pointer",padding:"0 0 0 10px",lineHeight:1}}>×</button>
+          </div>
+          <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap"}}>
+            <button onClick={()=>{setForm({...item});setEditingId(item.id);setShowAdd(true);window.scrollTo({top:0,behavior:"smooth"});}}
+              style={{flex:1,padding:"8px",background:"transparent",border:`1px solid ${C.terracotta}66`,
+              borderRadius:8,color:C.terracotta,fontFamily:"'Playfair Display',serif",fontSize:12,
+              cursor:"pointer",touchAction:"manipulation"}}>✏️ Edit</button>
+            <button onClick={async()=>{
+                onSave("saving");
+                const stored=localStorage.getItem("sjj_sjj-trips");
+                const existing=stored?JSON.parse(stored):[];
+                const trip={id:`t${Date.now()}`,name:item.name,destination:item.region||"",dates:item.bestSeason||"",days:"",status:"Planning",notes:item.notes||""};
+                const updated=[...existing,trip];
+                localStorage.setItem("sjj_sjj-trips",JSON.stringify(updated));
+                try{await window.storage.set("sjj-trips",JSON.stringify(updated));}catch{}
+                onSave("saved");
+              }}
+              style={{flex:2,padding:"8px",background:C.sky+"11",border:`1px solid ${C.sky}66`,
+              borderRadius:8,color:C.sky,fontFamily:"'Playfair Display',serif",fontSize:12,
+              cursor:"pointer",touchAction:"manipulation"}}>◈ Send to Planner</button>
           </div>
         </Card>
       ))}
@@ -1430,8 +1454,6 @@ export default function App() {
   const [active, setActive] = useState("bucketlist");
   const [saveState, setSaveState] = useState("idle");
   const [memoriesData] = useStored("sjj-memories", SEED_MEMORIES);
-  const [bucketData, saveBucketData] = useStored("sjj-bucket", SEED_BUCKET);
-  const [tripsData, saveTripsData] = useStored("sjj-trips", SEED_TRIPS);
 
   const onSave = useCallback((state) => {
     setSaveState(state);
@@ -1439,39 +1461,30 @@ export default function App() {
   }, []);
 
   const addToBucket = useCallback(async (s) => {
-    if(!bucketData) return;
     onSave("saving");
-    const newItem = {
-      id: `b${Date.now()}`,
-      name: s.name,
-      region: s.region || "Palm Springs & Desert",
-      vibes: [],
-      notes: s.why || "",
-      priority: "Next Up",
-      bestSeason: "Spring",
-      lat: null, lng: null,
-      youtubeAngle: s.youtubeAngle || ""
-    };
-    await saveBucketData([...bucketData, newItem]);
+    try {
+      const stored = localStorage.getItem("sjj_sjj-bucket");
+      const existing = stored ? JSON.parse(stored) : SEED_BUCKET;
+      const newItem = { id:`b${Date.now()}`, name:s.name, region:s.region||"Palm Springs & Desert", vibes:[], notes:s.why||"", priority:"Next Up", bestSeason:"Spring", lat:null, lng:null, youtubeAngle:s.youtubeAngle||"" };
+      const updated = [...existing, newItem];
+      localStorage.setItem("sjj_sjj-bucket", JSON.stringify(updated));
+      try { await window.storage.set("sjj-bucket", JSON.stringify(updated)); } catch {}
+    } catch(e) {}
     onSave("saved");
-  }, [bucketData, saveBucketData, onSave]);
+  }, [onSave]);
 
   const addToPlanner = useCallback(async (s) => {
-    if(!tripsData) return;
     onSave("saving");
-    const newTrip = {
-      id: `t${Date.now()}`,
-      name: s.name,
-      destination: s.region || "",
-      dates: s.bestTime || "",
-      days: "",
-      status: "Planning",
-      notes: s.why || ""
-    };
-    await saveTripsData([...tripsData, newTrip]);
+    try {
+      const stored = localStorage.getItem("sjj_sjj-trips");
+      const existing = stored ? JSON.parse(stored) : SEED_TRIPS;
+      const newTrip = { id:`t${Date.now()}`, name:s.name, destination:s.region||"", dates:s.bestTime||"", days:"", status:"Planning", notes:s.why||"" };
+      const updated = [...existing, newTrip];
+      localStorage.setItem("sjj_sjj-trips", JSON.stringify(updated));
+      try { await window.storage.set("sjj-trips", JSON.stringify(updated)); } catch {}
+    } catch(e) {}
     onSave("saved");
-  }, [tripsData, saveTripsData, onSave]);
-
+  }, [onSave]);
   return (
     <div style={{minHeight:"100vh",background:"linear-gradient(135deg,#F7F0E3 0%,#EDE0C8 50%,#F0E8D5 100%)",fontFamily:"Georgia,serif"}}>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet"/>
