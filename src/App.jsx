@@ -16,6 +16,39 @@ const NAV = [
 ];
 
 const REGIONS = ["All","Palm Springs & Desert","SoCal Coast","Los Angeles","Central Coast","Bay Area","NorCal","Sierra Nevada"];
+// ─── REGION NORMALIZER ─────────────────────────────────────────────────────
+// Maps any variant/AI-generated region string to the canonical REGIONS value.
+const REGION_MAP = {
+  "palm springs": "Palm Springs & Desert",
+  "desert": "Palm Springs & Desert",
+  "coachella": "Palm Springs & Desert",
+  "socal coast": "SoCal Coast",
+  "southern california coast": "SoCal Coast",
+  "so cal coast": "SoCal Coast",
+  "socal": "SoCal Coast",
+  "los angeles": "Los Angeles",
+  "central coast": "Central Coast",
+  "central california coast": "Central Coast",
+  "bay area": "Bay Area",
+  "san francisco": "Bay Area",
+  "norcal": "NorCal",
+  "northern california": "NorCal",
+  "sierra nevada": "Sierra Nevada",
+  "sierra": "Sierra Nevada",
+  "lake tahoe": "Sierra Nevada",
+};
+function normalizeRegion(r) {
+  if (!r) return REGIONS[1];
+  const trimmed = r.trim();
+  if (REGIONS.includes(trimmed)) return trimmed;
+  const key = trimmed.toLowerCase();
+  if (REGION_MAP[key]) return REGION_MAP[key];
+  const match = REGIONS.slice(1).find(reg =>
+    key.includes(reg.toLowerCase()) || reg.toLowerCase().includes(key)
+  );
+  return match || REGIONS[1];
+}
+
 const VIBES   = ["Hidden Gem","Scenic Drive","Foodie","Beach","Mountain","Culture","Wine","Adventure"];
 const SEASONS = { Spring:"🌸", Summer:"☀️", Fall:"🍂", Winter:"❄️" };
 
@@ -314,7 +347,7 @@ function BucketList({ onSave }) {
   const [form, setForm] = useState(blank);
   const [editingId, setEditingId] = useState(null);
 
-  const filtered = !items ? [] : filter==="All" ? items : items.filter(i=>i.region===filter);
+  const filtered = !items ? [] : filter==="All" ? items : items.filter(i=>normalizeRegion(i.region)===filter);
   const toggleVibe = v => setForm(f=>({ ...f, vibes:f.vibes.includes(v)?f.vibes.filter(x=>x!==v):[...f.vibes,v] }));
 
   const callAI = async () => {
@@ -334,7 +367,7 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
       const data = await res.json();
       const raw = data.content?.find(b=>b.type==="text")?.text||"{}";
       const parsed = JSON.parse(raw.replace(/```json|```/g,"").trim());
-      setForm(f=>({...f,...parsed,vibes:parsed.vibes||[]}));
+      setForm(f=>({...f,...parsed,region:normalizeRegion(parsed.region),vibes:parsed.vibes||[]}));
       setAiMode(false);
     } catch { alert("Couldn't generate — try again!"); }
     setAiLoading(false);
@@ -346,7 +379,7 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
     if(editingId) {
       await saveItems(items.map(i => i.id===editingId ? {...form, id:editingId} : i));
     } else {
-      await saveItems([...items, {...form, id:`b${Date.now()}`}]);
+      await saveItems([...items, {...form, region:normalizeRegion(form.region), id:`b${Date.now()}`}]);
     }
     setForm(blank); setEditingId(null); setShowAdd(false); aiDescRef.current=""; onSave("saved");
   };
@@ -460,13 +493,13 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
       )}
 
       {/* List */}
-      {view==="list" && (items||[]).map(item=>(
+      {view==="list" && (filtered||[]).map(item=>(
         <Card key={item.id}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
             <div style={{flex:1}}>
               <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:18,color:C.dark,margin:"0 0 6px"}}>{item.name}</h3>
               <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:8}}>
-                <Tag label={item.region} color={C.sky}/>
+                <Tag label={normalizeRegion(item.region)} color={C.sky}/>
                 {(item.vibes||[]).map(v=><Tag key={v} label={v} color={C.gold}/>)}
                 <Tag label={item.priority} color={item.priority==="Dream Trip"?C.plum:item.priority==="Next Up"?C.terracotta:C.muted}/>
                 {item.bestSeason&&<Tag label={`${SEASONS[item.bestSeason]} ${item.bestSeason}`} color={C.sage}/>}
