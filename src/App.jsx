@@ -1578,7 +1578,7 @@ export default function App() {
             <span style={{fontSize:19,color:C.gold}}>✦</span>
             <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:19,color:C.sand,margin:0,letterSpacing:"0.02em"}}>Sharing Joyful Journeys</h1>
           </div>
-          <p style={{color:C.muted,fontSize:10,margin:"2px 0 0",letterSpacing:"0.15em",textTransform:"uppercase"}}>Paul & Our California Adventures</p>
+          <p style={{color:C.muted,fontSize:10,margin:"2px 0 0",letterSpacing:"0.15em",textTransform:"uppercase"}}>Our California Adventures</p>
         </div>
         <div style={{textAlign:"right"}}>
           <div style={{fontSize:9,color:C.muted,letterSpacing:"0.1em"}}>HOME BASE</div>
