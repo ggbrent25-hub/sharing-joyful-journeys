@@ -1,4 +1,20 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
+
+// ─── FIREBASE INIT ────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyCxDi3-L9YsTBxdOD_oocw8HjKjbM7hCvk",
+  authDomain: "sjj-app-data.firebaseapp.com",
+  projectId: "sjj-app-data",
+  storageBucket: "sjj-app-data.firebasestorage.app",
+  messagingSenderId: "333692533187",
+  appId: "1:333692533187:web:9d646f34f342968504e576"
+};
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const USER_ID = "ggbrent25"; // single-user app
+
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
 const C = {
@@ -120,62 +136,58 @@ function compressImage(file) {
   });
 }
 
-// ─── STORAGE — DUAL LAYER ─────────────────────────────────────────────────────
-// Writes to BOTH window.storage (Claude artifact) AND localStorage (browser).
-// Reads from window.storage first, falls back to localStorage.
-// This means data survives even if one layer fails.
+// ─── FIREBASE CONFIG + INIT ─────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyCxDi3-L9YsTBxdOD_oocw8HjKjbM7hCvk",
+  authDomain: "sjj-app-data.firebaseapp.com",
+  projectId: "sjj-app-data",
+  storageBucket: "sjj-app-data.firebasestorage.app",
+  messagingSenderId: "333692533187",
+  appId: "1:333692533187:web:9d646f34f342968504e576"
+};
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const DATA_DOC_ID = "main"; // single document per collection
 
-const LS_PREFIX = "sjj_";
-
-async function storageSet(key, value) {
-  // Always write to localStorage first — it's synchronous and reliable
-  try { localStorage.setItem(LS_PREFIX + key, value); } catch {}
-  // Also write to window.storage (async, may not persist across sessions)
-  try { await window.storage.set(key, value); } catch {}
+// ─── FIRESTORE HELPERS ──────────────────────────────────────────────────────
+async function firestoreSet(collectionName, data) {
+  try {
+    const payload = typeof data === "string" ? data : JSON.stringify(data);
+    await setDoc(doc(db, collectionName, DATA_DOC_ID), { data: payload });
+  } catch(e) { console.error("Firestore write error:", e); }
 }
 
-async function storageGet(key) {
-  // Try window.storage first
+async function firestoreGet(collectionName) {
   try {
-    const r = await window.storage.get(key);
-    if (r?.value) {
-      // Mirror to localStorage in case window.storage is ahead
-      try { localStorage.setItem(LS_PREFIX + key, r.value); } catch {}
-      return r.value;
-    }
-  } catch {}
-  // Fall back to localStorage
-  try {
-    const v = localStorage.getItem(LS_PREFIX + key);
-    if (v) return v;
-  } catch {}
+    const snap = await getDoc(doc(db, collectionName, DATA_DOC_ID));
+    if (snap.exists()) return JSON.parse(snap.data().data);
+  } catch(e) { console.error("Firestore read error:", e); }
   return null;
 }
 
-async function storageDelete(key) {
-  try { localStorage.removeItem(LS_PREFIX + key); } catch {}
-  try { await window.storage.delete(key); } catch {}
-}
-
-// ─── PHOTO STORAGE HELPERS ────────────────────────────────────────────────────
-const photoKey = (id) => `sjj-photo-${id}`;
+// ─── PHOTO STORAGE HELPERS ───────────────────────────────────────────────────────────
+const photoKey = (id) => `photo_${id}`;
 
 async function savePhoto(id, data) {
   try {
-    await storageSet(photoKey(id), JSON.stringify(data));
+    await setDoc(doc(db, "photos", id), { data: JSON.stringify(data) });
     return true;
   } catch { return false; }
 }
 
 async function loadPhoto(id) {
   try {
-    const v = await storageGet(photoKey(id));
-    return v ? JSON.parse(v) : null;
-  } catch { return null; }
+    const snap = await getDoc(doc(db, "photos", id));
+    if (snap.exists()) return JSON.parse(snap.data().data);
+  } catch {}
+  return null;
 }
 
 async function deletePhoto(id) {
-  await storageDelete(photoKey(id));
+  try {
+    const { deleteDoc } = await import("firebase/firestore");
+    await deleteDoc(doc(db, "photos", id));
+  } catch {}
 }
 
 async function loadPhotosForMemory(photoIds = []) {
@@ -183,21 +195,17 @@ async function loadPhotosForMemory(photoIds = []) {
   return photoIds.map((id, i) => ({ id, ...(results[i] || { url:"", caption:"", originalName:"" }) }));
 }
 
-// ─── GENERIC STORAGE HOOK ─────────────────────────────────────────────────────
+// ─── GENERIC STORAGE HOOK (Firestore-backed) ──────────────────────────────────
 function useStored(key, seedData) {
-  const [data, setData]       = useState(null);
+  const [data, setData] = useState(seedData);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
-        const v = await storageGet(key);
-        if (v) {
-          setData(JSON.parse(v));
-        } else {
-          setData(seedData);
-          await storageSet(key, JSON.stringify(seedData));
-        }
+        const v = await firestoreGet(key);
+        setData(v !== null ? v : seedData);
+        if (v === null) await firestoreSet(key, seedData);
       } catch {
         setData(seedData);
       }
@@ -207,11 +215,12 @@ function useStored(key, seedData) {
 
   const save = useCallback(async (newData) => {
     setData(newData);
-    try { await storageSet(key, JSON.stringify(newData)); } catch {}
+    try { await firestoreSet(key, newData); } catch {}
   }, [key]);
 
   return [data, save, loading];
 }
+
 
 // ─── SHARED UI ────────────────────────────────────────────────────────────────
 const Tag = ({ label, color }) => (
@@ -516,12 +525,10 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
               cursor:"pointer",touchAction:"manipulation"}}>✏️ Edit</button>
             <button onClick={async()=>{
                 onSave("saving");
-                const stored=localStorage.getItem("sjj_sjj-trips");
                 const existing=stored?JSON.parse(stored):[];
                 const trip={id:`t${Date.now()}`,name:item.name,destination:item.region||"",dates:item.bestSeason||"",days:"",status:"Planning",notes:item.notes||""};
                 const updated=[...existing,trip];
-                localStorage.setItem("sjj_sjj-trips",JSON.stringify(updated));
-                try{await window.storage.set("sjj-trips",JSON.stringify(updated));}catch{}
+                await firestoreSet("sjj-trips",JSON.stringify(updated));
                 await remove(item.id);
               }}
               style={{flex:2,padding:"8px",background:C.sky+"11",border:`1px solid ${C.sky}66`,
@@ -1544,12 +1551,10 @@ export default function App() {
   const addToBucket = useCallback(async (s) => {
     onSave("saving");
     try {
-      const stored = localStorage.getItem("sjj_sjj-bucket");
       const existing = stored ? JSON.parse(stored) : SEED_BUCKET;
       const newItem = { id:`b${Date.now()}`, name:s.name, region:s.region||"Palm Springs & Desert", vibes:[], notes:s.why||"", priority:"Next Up", bestSeason:"Spring", lat:null, lng:null, youtubeAngle:s.youtubeAngle||"" };
       const updated = [...existing, newItem];
-      localStorage.setItem("sjj_sjj-bucket", JSON.stringify(updated));
-      try { await window.storage.set("sjj-bucket", JSON.stringify(updated)); } catch {}
+      await firestoreSet("sjj-bucket", JSON.stringify(updated));
     } catch(e) {}
     onSave("saved");
   }, [onSave]);
@@ -1557,12 +1562,10 @@ export default function App() {
   const addToPlanner = useCallback(async (s) => {
     onSave("saving");
     try {
-      const stored = localStorage.getItem("sjj_sjj-trips");
       const existing = stored ? JSON.parse(stored) : SEED_TRIPS;
       const newTrip = { id:`t${Date.now()}`, name:s.name, destination:s.region||"", dates:s.bestTime||"", days:"", status:"Planning", notes:s.why||"" };
       const updated = [...existing, newTrip];
-      localStorage.setItem("sjj_sjj-trips", JSON.stringify(updated));
-      try { await window.storage.set("sjj-trips", JSON.stringify(updated)); } catch {}
+      await firestoreSet("sjj-trips", JSON.stringify(updated));
     } catch(e) {}
     onSave("saved");
   }, [onSave]);
