@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
-// ─── DESIGN TOKENS ────────────────────────────────────────────────────────────
+// ─── DESIGN TOKENS ───────────────────────────────────────────────────────────
 const C = {
   sand:"#F5E6C8", terracotta:"#C4623A", sage:"#7A9E7E",
   sky:"#5B8DB8", plum:"#7B5C8A", gold:"#D4A843",
@@ -1332,10 +1332,10 @@ function AISuggestions({ memoriesData, onAddToBucket, onAddToPlanner }) {
   const [loading, setLoading]     = useState(false);
   const [suggestions, setSuggestions] = useState(null);
   const [error, setError]         = useState(null);
-  const [season, setSeason]       = useState("Fall");
-  const [vibe, setVibe]           = useState("Mountain");
-  const [region, setRegion]       = useState("Anywhere");
-  const [saved, setSaved]         = useState({});
+  const [season, setSeason]       = useStored("sjj-ai-season", "Fall");
+  const [vibe, setVibe]           = useStored("sjj-ai-vibe", "Mountain");
+  const [region, setRegion]       = useStored("sjj-ai-region", "Anywhere");
+  const [saved, setSaved]         = useStored("sjj-ai-saved", {});
 
   const go = async () => {
     setLoading(true);
@@ -1532,7 +1532,7 @@ Respond with ONLY a JSON array — no markdown, no explanation, no backticks. Th
 
 // ─── ROOT APP ─────────────────────────────────────────────────────────────────
 export default function App() {
-  const [active, setActive] = useState("bucketlist");
+  const [active, setActive] = useStored("sjj-active-tab", "bucketlist");
   const [saveState, setSaveState] = useState("idle");
   const [memoriesData] = useStored("sjj-memories", SEED_MEMORIES);
 
