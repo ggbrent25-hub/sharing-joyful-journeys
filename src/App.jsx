@@ -13,6 +13,7 @@ const firebaseConfig = {
 };
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
+const DATA_DOC_ID = "main"; // single document per collection
 const USER_ID = "ggbrent25"; // single-user app
 
 
