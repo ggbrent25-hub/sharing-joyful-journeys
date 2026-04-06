@@ -173,7 +173,6 @@ async function loadPhoto(id) {
 
 async function deletePhoto(id) {
   try {
-    const { deleteDoc } = await import("firebase/firestore");
     await deleteDoc(doc(db, "photos", id));
   } catch {}
 }
@@ -513,7 +512,7 @@ Return ONLY valid JSON (no markdown): name, region (one of: Palm Springs & Deser
               cursor:"pointer",touchAction:"manipulation"}}>✏️ Edit</button>
             <button onClick={async()=>{
                 onSave("saving");
-                const existing=stored?JSON.parse(stored):[];
+                const existing=await firestoreGet("sjj-trips")||SEED_TRIPS;
                 const trip={id:`t${Date.now()}`,name:item.name,destination:item.region||"",dates:item.bestSeason||"",days:"",status:"Planning",notes:item.notes||""};
                 const updated=[...existing,trip];
                 await firestoreSet("sjj-trips",JSON.stringify(updated));
@@ -1327,10 +1326,10 @@ function AISuggestions({ memoriesData, onAddToBucket, onAddToPlanner }) {
   const [loading, setLoading]     = useState(false);
   const [suggestions, setSuggestions] = useState(null);
   const [error, setError]         = useState(null);
-  const [season, setSeason]       = useStored("sjj-ai-season", "Fall");
-  const [vibe, setVibe]           = useStored("sjj-ai-vibe", "Mountain");
-  const [region, setRegion]       = useStored("sjj-ai-region", "Anywhere");
-  const [saved, setSaved]         = useStored("sjj-ai-saved", {});
+  const [season, setSeason] = useState("Fall");
+  const [vibe, setVibe] = useState("Mountain");
+  const [region, setRegion] = useState("Anywhere");
+  const [saved, setSaved] = useState({});
 
   const go = async () => {
     setLoading(true);
@@ -1539,10 +1538,10 @@ export default function App() {
   const addToBucket = useCallback(async (s) => {
     onSave("saving");
     try {
-      const existing = stored ? JSON.parse(stored) : SEED_BUCKET;
+      const existing = await firestoreGet("sjj-bucket") || SEED_BUCKET;
       const newItem = { id:`b${Date.now()}`, name:s.name, region:s.region||"Palm Springs & Desert", vibes:[], notes:s.why||"", priority:"Next Up", bestSeason:"Spring", lat:null, lng:null, youtubeAngle:s.youtubeAngle||"" };
       const updated = [...existing, newItem];
-      await firestoreSet("sjj-bucket", JSON.stringify(updated));
+      await firestoreSet("sjj-bucket", updated);
     } catch(e) {}
     onSave("saved");
   }, [onSave]);
@@ -1550,10 +1549,10 @@ export default function App() {
   const addToPlanner = useCallback(async (s) => {
     onSave("saving");
     try {
-      const existing = stored ? JSON.parse(stored) : SEED_TRIPS;
+      const existing = await firestoreGet("sjj-trips") || SEED_TRIPS;
       const newTrip = { id:`t${Date.now()}`, name:s.name, destination:s.region||"", dates:s.bestTime||"", days:"", status:"Planning", notes:s.why||"" };
       const updated = [...existing, newTrip];
-      await firestoreSet("sjj-trips", JSON.stringify(updated));
+      await firestoreSet("sjj-trips", updated);
     } catch(e) {}
     onSave("saved");
   }, [onSave]);
@@ -1595,7 +1594,7 @@ export default function App() {
       {/* Content */}
       <div style={{maxWidth:680,margin:"0 auto",padding:"20px 13px 80px"}}>
         {active==="bucketlist" && <BucketList onSave={onSave}/>}
-        {active==="planner"    && <TripPlanner onSav={onSave}/>}
+        {active==="planner"    && <TripPlanner onSave={onSave}/>}
         {active==="memories"   && <Memories onSave={onSave}/>}
         {active==="youtube"    && <YouTubeStudio onSave={onSave}/>}
         {active==="aisuggest"  && <AISuggestions memoriesData={memoriesData||[]} onAddToBucket={addToBucket} onAddToPlanner={addToPlanner}/>}
