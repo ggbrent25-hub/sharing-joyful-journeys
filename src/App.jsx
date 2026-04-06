@@ -136,19 +136,6 @@ function compressImage(file) {
   });
 }
 
-// ─── FIREBASE CONFIG + INIT ─────────────────────────────────────────────
-const firebaseConfig = {
-  apiKey: "AIzaSyCxDi3-L9YsTBxdOD_oocw8HjKjbM7hCvk",
-  authDomain: "sjj-app-data.firebaseapp.com",
-  projectId: "sjj-app-data",
-  storageBucket: "sjj-app-data.firebasestorage.app",
-  messagingSenderId: "333692533187",
-  appId: "1:333692533187:web:9d646f34f342968504e576"
-};
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-const DATA_DOC_ID = "main"; // single document per collection
-
 // ─── FIRESTORE HELPERS ──────────────────────────────────────────────────────
 async function firestoreSet(collectionName, data) {
   try {
