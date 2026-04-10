@@ -4,10 +4,10 @@ import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "firebase/firestore
 
 // ─── FIREBASE INIT ────────────────────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyCxDi3-L9YsTBxdOD_oocw8HjKjbM7hCvk",
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "sjj-app-data.firebaseapp.com",
   projectId: "sjj-app-data",
-  storageBucket: "sjj-app-data.firebasestorage.app",
+  storageBucket: "sjj-app-data.firebasestorage.app"
   messagingSenderId: "333692533187",
   appId: "1:333692533187:web:9d646f34f342968504e576"
 };
