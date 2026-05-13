@@ -138,18 +138,34 @@ function compressImage(file) {
 }
 
 // ─── FIRESTORE HELPERS ──────────────────────────────────────────────────────
+const LS_PREFIX = 'sjj_';
+
 async function firestoreSet(collectionName, data) {
+  const payload = typeof data === "string" ? data : JSON.stringify(data);
+  // Always write to localStorage immediately as reliable local fallback
+  try { localStorage.setItem(LS_PREFIX + collectionName, payload); } catch {}
+  // Also try Firestore for cross-device sync
   try {
-    const payload = typeof data === "string" ? data : JSON.stringify(data);
     await setDoc(doc(db, collectionName, DATA_DOC_ID), { data: payload });
   } catch(e) { console.error("Firestore write error:", e); }
 }
 
 async function firestoreGet(collectionName) {
+  // Try Firestore first for latest cloud data
   try {
     const snap = await getDoc(doc(db, collectionName, DATA_DOC_ID));
-    if (snap.exists()) return JSON.parse(snap.data().data);
+    if (snap.exists()) {
+      const parsed = JSON.parse(snap.data().data);
+      // Keep localStorage in sync with cloud data
+      try { localStorage.setItem(LS_PREFIX + collectionName, snap.data().data); } catch {}
+      return parsed;
+    }
   } catch(e) { console.error("Firestore read error:", e); }
+  // Fall back to localStorage when Firestore is unavailable
+  try {
+    const v = localStorage.getItem(LS_PREFIX + collectionName);
+    if (v !== null) return JSON.parse(v);
+  } catch {}
   return null;
 }
 
