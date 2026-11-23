@@ -18,7 +18,13 @@ img{max-width:100%}
 a{color:#256F7A}a:hover{color:#1A4A60}
 a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #D87830;outline-offset:3px}
 @media (max-width:600px){h1{font-size:60px !important}h2{font-size:32px !important}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.hw{display:inline-block;animation:word-in .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes word-in{from{opacity:0;transform:translateX(70px)}to{opacity:1;transform:none}}
+.fade-up{animation:fade-up .7s ease-out both}
+@keyframes fade-up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#trip-compass.find-north{animation:find-north 2.6s cubic-bezier(.3,.1,.3,1) both}
+@keyframes find-north{0%{transform:rotate(-140deg)}45%{transform:rotate(16deg)}65%{transform:rotate(-8deg)}82%{transform:rotate(4deg)}93%{transform:rotate(-1.5deg)}100%{transform:rotate(0)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hw,.fade-up,#trip-compass.find-north{animation:none}}
 </style>
 </head>
 <body>
@@ -39,9 +45,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #D878
 <section style="max-width: 1160px; margin: 0 auto; padding: 64px 24px 72px; display: flex; flex-wrap: wrap; align-items: center; gap: 48px 64px">
 <div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 24px; align-items: flex-start">
 <p style="margin: 0; font-weight: 700; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #256F7A">Travel stories and trip ideas from Brent</p>
-<h1 style="margin: 0; font-family: 'Dancing Script', 'Bricolage Grotesque', cursive; font-weight: 700; font-size: 88px; line-height: 1; color: #232D45; text-wrap: balance">Go where the joy is.</h1>
-<p style="margin: 0; font-size: 21px; line-height: 1.5; max-width: 520px; color: #4A5468">Travel stories, trip ideas, and a little help making more room for what you love.</p>
-<div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
+<h1 style="margin: 0; font-family: 'Dancing Script', 'Bricolage Grotesque', cursive; font-weight: 700; font-size: 88px; line-height: 1; color: #232D45; text-wrap: balance"><span class="hw" style="animation-delay: 150ms">Go</span> <span class="hw" style="animation-delay: 320ms">where</span> <span class="hw" style="animation-delay: 490ms">the</span> <span class="hw" style="animation-delay: 660ms">joy</span> <span class="hw" style="animation-delay: 830ms">is.</span></h1>
+<p class="fade-up" style="animation-delay: 1050ms; margin: 0; font-size: 21px; line-height: 1.5; max-width: 520px; color: #4A5468">Travel stories, trip ideas, and a little help making more room for what you love.</p>
+<div class="fade-up" style="animation-delay: 1250ms; display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
 <a href="https://plan-with-brent.vercel.app" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; background: #1F5F73; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 18px; padding: 18px 28px; border-radius: 999px">Explore Travel Ideas with Brent
 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
 </a>
@@ -65,7 +71,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #D878
 <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
 
 <article id="travel" style="flex: 1.25 1 320px; min-width: 0; background: #232D45; color: #FFFFFF; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 16px">
-<img src="images/logo_sq.png" alt="Sharing Joyful Journeys compass and heart logo" style="display: block; width: 128px; height: 128px; object-fit: cover; border-radius: 50%; background: #FFFFFF">
+<img src="images/logo_sq.png" id="trip-compass" alt="Sharing Joyful Journeys compass and heart logo" style="display: block; width: 128px; height: 128px; object-fit: cover; border-radius: 50%; background: #FFFFFF">
 <h3 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 30px; line-height: 1.15">Plan a trip</h3>
 <p style="margin: 0; font-size: 18px; line-height: 1.5; color: #D9DEE8">Dreaming of your next trip? Step through the door, browse some ideas, and let's plan it together.</p>
 <div style="margin-top: auto; padding-top: 12px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start">
@@ -247,6 +253,16 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #D878
       .catch(function(){ status.textContent="That didn't go through. Please try again, or call or text 954-684-8178."; })
       .then(function(){ button.disabled=false; });
   });
+})();
+</script>
+<script>
+(function(){
+  var c=document.getElementById('trip-compass'); if(!c) return;
+  if(!('IntersectionObserver' in window)){ c.classList.add('find-north'); return; }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ c.classList.add('find-north'); io.disconnect(); } });
+  },{threshold:0.6});
+  io.observe(c);
 })();
 </script>
 </body>
