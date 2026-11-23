@@ -1,22 +1,262 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <title>Sharing Joyful Journeys</title>
-    <!-- PWA / Home Screen Icon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="SJJ">
-  <meta name="mobile-web-app-capable" content="yes">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sharing Joyful Journeys</title>
+<meta name="description" content="Travel stories, trip ideas, and a little help making more room for what you love.">
+<meta property="og:title" content="Sharing Joyful Journeys">
+<meta property="og:description" content="Travel stories, trip ideas, and a little help making more room for what you love.">
+<meta property="og:image" content="images/banner.jpg">
+<link rel="icon" href="images/logo_sq.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Dancing+Script:wght@700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0}
+img{max-width:100%}
+a{color:#256F7A}a:hover{color:#1A4A60}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #D87830;outline-offset:3px}
+@media (max-width:600px){h1{font-size:60px !important}h2{font-size:32px !important}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<body>
+<div style="font-family: 'Figtree', system-ui, sans-serif; color: #232D45; background: #FAF7F2; font-size: 17px; line-height: 1.55">
+
+<header id="top" style="background: #FFFFFF; border-bottom: 1px solid #E7E0D4">
+<img src="images/banner.jpg" alt="Sharing Joyful Journeys" style="display: block; width: 100%; height: auto">
+<nav aria-label="Main" style="max-width: 1160px; margin: 0 auto; padding: 8px 24px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 36px; font-weight: 600; font-size: 16px">
+<a href="#travel" style="color: #232D45; text-decoration: none; padding: 12px 0">Travel</a>
+<a href="#where-next" style="color: #232D45; text-decoration: none; padding: 12px 0">Destinations</a>
+<a href="#watch" style="color: #232D45; text-decoration: none; padding: 12px 0">Watch</a>
+<a href="#ai" style="color: #232D45; text-decoration: none; padding: 12px 0">AI Guides</a>
+<a href="#brent" style="color: #232D45; text-decoration: none; padding: 12px 0">Meet Brent</a>
+<a href="#shop" style="color: #232D45; text-decoration: none; padding: 12px 0">Shop</a>
+</nav>
+</header>
+
+<section style="max-width: 1160px; margin: 0 auto; padding: 64px 24px 72px; display: flex; flex-wrap: wrap; align-items: center; gap: 48px 64px">
+<div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 24px; align-items: flex-start">
+<p style="margin: 0; font-weight: 700; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #256F7A">Travel stories and trip ideas from Brent</p>
+<h1 style="margin: 0; font-family: 'Dancing Script', 'Bricolage Grotesque', cursive; font-weight: 700; font-size: 88px; line-height: 1; color: #232D45; text-wrap: balance">Go where the joy is.</h1>
+<p style="margin: 0; font-size: 21px; line-height: 1.5; max-width: 520px; color: #4A5468">Travel stories, trip ideas, and a little help making more room for what you love.</p>
+<div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
+<a href="https://plan-with-brent.vercel.app" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; background: #1F5F73; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 18px; padding: 18px 28px; border-radius: 999px">Explore Travel Ideas with Brent
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+</a>
+<p style="margin: 0; font-size: 15px; color: #4A5468">Opens Plan with Brent in a new tab.</p>
+</div>
+</div>
+<div style="flex: 0 1 420px; min-width: 260px; margin: 0 auto">
+<div style="background: #F0C060; border-radius: 240px 240px 20px 20px; padding: 12px">
+<img src="images/budapest.jpg" alt="Brent and Paul in winter coats in front of the Chain Bridge in Budapest" style="display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 28%; border-radius: 228px 228px 12px 12px">
+</div>
+<p style="margin: 12px 0 0; font-size: 14px; color: #4A5468; text-align: center">Chain Bridge, Budapest</p>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border-top: 1px solid #E7E0D4; border-bottom: 1px solid #E7E0D4">
+<div style="max-width: 1160px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 800; font-size: 40px; line-height: 1.1; letter-spacing: -0.02em; color: #232D45">Choose your journey</h2>
+<p style="margin: 0; font-size: 18px; color: #4A5468">Three ways in. Start wherever you like.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
+
+<article id="travel" style="flex: 1.25 1 320px; min-width: 0; background: #232D45; color: #FFFFFF; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 16px">
+<img src="images/logo_sq.png" alt="Sharing Joyful Journeys compass and heart logo" style="display: block; width: 128px; height: 128px; object-fit: cover; border-radius: 50%; background: #FFFFFF">
+<h3 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 30px; line-height: 1.15">Plan a trip</h3>
+<p style="margin: 0; font-size: 18px; line-height: 1.5; color: #D9DEE8">Dreaming of your next trip? Step through the door, browse some ideas, and let's plan it together.</p>
+<div style="margin-top: auto; padding-top: 12px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start">
+<a href="https://plan-with-brent.vercel.app" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; background: #F0C060; color: #232D45; text-decoration: none; font-weight: 700; font-size: 17px; padding: 15px 24px; border-radius: 999px">Explore Travel Ideas with Brent
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+</a>
+<p style="margin: 0; font-size: 16px; color: #D9DEE8">Rather talk it through? Call or text 954-684-8178.</p>
+</div>
+</article>
+
+<article id="watch" style="flex: 1 1 260px; min-width: 0; background: #FAF7F2; border: 1px solid #E7E0D4; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="align-self: flex-start; background: #232D45; border-radius: 14px; padding: 4px 10px; display: flex; align-items: center"><img src="images/youtube.png" alt="YouTube" style="display: block; height: 72px; width: auto"></div>
+<h3 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 30px; line-height: 1.15; color: #232D45">Watch the stories</h3>
+<p style="margin: 0; font-size: 18px; line-height: 1.5; color: #4A5468">Sharing Joyful Journeys on YouTube. Story before spectacle, and the real texture of a trip.</p>
+<p style="margin: auto 0 0; padding-top: 12px"><span style="display: inline-block; background: #FFFFFF; border: 1px solid #CFC6B6; color: #232D45; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 16px; border-radius: 999px">Coming soon</span></p>
+</article>
+
+<article id="ai" style="flex: 1 1 100%; min-width: 0; background: #FAF7F2; border: 1px solid #E7E0D4; border-radius: 20px; padding: 32px; display: flex; flex-wrap: wrap; gap: 28px 40px; align-items: center">
+<div style="flex: 1 1 220px; max-width: 340px; min-width: 0; margin: 0 auto; display: flex; align-items: center; justify-content: center; padding: 8px 0">
+<img src="images/cover_pickme.jpg" alt="Cover of the guide Pick Me, Pick Me" style="display: block; width: 36%; height: auto; border-radius: 6px; box-shadow: 0 6px 18px rgba(35, 45, 69, 0.25); transform: rotate(-5deg)">
+<img src="images/cover_main.jpg" alt="Cover of the guide AI for the Rest of Us" style="display: block; width: 42%; height: auto; margin: 0 -7%; position: relative; z-index: 1; border-radius: 6px; box-shadow: 0 8px 22px rgba(35, 45, 69, 0.3)">
+<img src="images/cover_real.jpg" alt="Cover of the guide Make It Real" style="display: block; width: 36%; height: auto; border-radius: 6px; box-shadow: 0 6px 18px rgba(35, 45, 69, 0.25); transform: rotate(5deg)">
+</div>
+<div style="flex: 1.4 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 16px; align-items: flex-start">
+<h3 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 30px; line-height: 1.15; color: #232D45">AI for the Rest of Us</h3>
+<p style="margin: 0; font-size: 18px; line-height: 1.5; color: #4A5468">Less time on the busywork, more time for the journeys. 17 plain-English guides to help you get your hours back.</p>
+<a href="https://payhip.com/BrentBooher/collection/ai-for-the-rest-of-us" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; background: #FFFFFF; border: 2px solid #1F5F73; color: #1F5F73; text-decoration: none; font-weight: 700; font-size: 17px; padding: 13px 22px; border-radius: 999px">Get the Guides
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+</a>
+</div>
+</article>
+
+</div>
+</div>
+</section>
+
+<section id="where-next" style="max-width: 1160px; margin: 0 auto; padding: 80px 24px 0; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 800; font-size: 40px; line-height: 1.1; letter-spacing: -0.02em; color: #232D45">Where to next?</h2>
+<p style="margin: 0; font-size: 18px; color: #4A5468">A few places we love. Pick one and start dreaming.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 32px 24px">
+<a href="https://plan-with-brent.vercel.app" target="_blank" rel="noopener" style="min-width: 0; display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: #232D45">
+<img src="images/ps_pool.jpg" alt="Pink sunset over the mountains seen from the edge of a pool in Palm Springs" style="display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 35%; border-radius: 16px">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 22px; color: #232D45">Palm Springs, California</span><span style="font-weight: 700; font-size: 16px; color: #256F7A">Explore ideas</span></span>
+</a>
+<a href="https://plan-with-brent.vercel.app" target="_blank" rel="noopener" style="min-width: 0; display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: #232D45">
+<img src="images/n_canyon.jpg" alt="The Voringsfossen waterfall plunging into a green canyon in Norway" style="display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 50%; border-radius: 16px">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 22px; color: #232D45">Vøringsfossen, Norway</span><span style="font-weight: 700; font-size: 16px; color: #256F7A">Explore ideas</span></span>
+</a>
+<a href="https://plan-with-brent.vercel.app" target="_blank" rel="noopener" style="min-width: 0; display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: #232D45">
+<img src="images/prague.jpg" alt="Gothic bridge towers at the end of the Charles Bridge in Prague" style="display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 50%; border-radius: 16px">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 22px; color: #232D45">Prague, Czech Republic</span><span style="font-weight: 700; font-size: 16px; color: #256F7A">Explore ideas</span></span>
+</a>
+<a href="https://plan-with-brent.vercel.app" target="_blank" rel="noopener" style="min-width: 0; display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: #232D45">
+<img src="images/vienna_cathedral.jpg" alt="The Gothic spire of St. Stephen's Cathedral in Vienna" style="display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 50%; border-radius: 16px">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 22px; color: #232D45">Vienna, Austria</span><span style="font-weight: 700; font-size: 16px; color: #256F7A">Explore ideas</span></span>
+</a>
+<a href="https://plan-with-brent.vercel.app" target="_blank" rel="noopener" style="min-width: 0; display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: #232D45">
+<img src="images/n_pano.jpg" alt="The city of Bergen and its harbor seen from the hilltop above" style="display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 50%; border-radius: 16px">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 22px; color: #232D45">Bergen, Norway</span><span style="font-weight: 700; font-size: 16px; color: #256F7A">Explore ideas</span></span>
+</a>
+<a href="https://plan-with-brent.vercel.app" target="_blank" rel="noopener" style="min-width: 0; display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: #232D45">
+<img src="images/ftl.jpg" alt="Orange sunrise over the ocean and a beachfront resort in Fort Lauderdale" style="display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 50%; border-radius: 16px">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 22px; color: #232D45">Fort Lauderdale, Florida</span><span style="font-weight: 700; font-size: 16px; color: #256F7A">Explore ideas</span></span>
+</a>
+</div>
+</section>
+
+<section id="brent" style="max-width: 1160px; margin: 0 auto; padding: 80px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 48px 64px">
+<div style="flex: 0 1 380px; min-width: 240px; margin: 0 auto">
+<img src="images/krumlov.jpg" alt="Brent smiling above the rooftops of Cesky Krumlov" style="display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 70% 30%; border-radius: 20px">
+<p style="margin: 12px 0 0; font-size: 14px; color: #4A5468">Český Krumlov, Czech Republic</p>
+</div>
+<div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-family: 'Dancing Script', 'Bricolage Grotesque', cursive; font-weight: 700; font-size: 60px; line-height: 1.05; color: #232D45">Hi, I'm Brent.</h2>
+<p style="margin: 0; font-size: 19px; line-height: 1.6; max-width: 560px; color: #4A5468">I think the best trips are measured in moments, not miles. Paul and I have wandered the Christmas markets of Vienna and Budapest and piled the whole family into a van in Norway. This is where I share those stories and help you plan a few of your own.</p>
+<div style="display: flex; flex-direction: column; gap: 12px; padding-top: 4px">
+<p style="margin: 0; font-weight: 700; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #256F7A">The Joyful Journey Method</p>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 19px; font-weight: 600; color: #232D45">
+<li style="display: flex; gap: 14px; align-items: baseline"><span aria-hidden="true" style="flex: none; width: 10px; height: 10px; border-radius: 50%; background: #D87830; display: inline-block"></span>Story before spectacle</li>
+<li style="display: flex; gap: 14px; align-items: baseline"><span aria-hidden="true" style="flex: none; width: 10px; height: 10px; border-radius: 50%; background: #F0C060; display: inline-block"></span>Joy over optimization</li>
+<li style="display: flex; gap: 14px; align-items: baseline"><span aria-hidden="true" style="flex: none; width: 10px; height: 10px; border-radius: 50%; background: #48908F; display: inline-block"></span>Connection over consumption</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section style="background: #232D45; color: #FFFFFF">
+<div style="max-width: 1160px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 32px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 800; font-size: 40px; line-height: 1.1; letter-spacing: -0.02em">Moments along the way</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 32px 24px">
+<figure style="min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 12px">
+<img src="images/vienna.jpg" alt="Four friends smiling under a giant golden Willkommen star at Schonbrunn Palace" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 100%; border-radius: 16px">
+<figcaption style="font-size: 16px; color: #D9DEE8">Christmas market at Schönbrunn Palace, Vienna</figcaption>
+</figure>
+<figure style="min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 12px">
+<img src="images/norway.jpg" alt="A family in matching vacation T-shirts cheering with arms raised beside a van in Norway" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 30%; border-radius: 16px">
+<figcaption style="font-size: 16px; color: #D9DEE8">The whole family, matching shirts and all, Norway</figcaption>
+</figure>
+<figure style="min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 12px">
+<img src="images/salzburg_full.jpg" alt="Brent and Paul raising a glass in an ornate hall with chandeliers in Salzburg" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 50%; border-radius: 16px">
+<figcaption style="font-size: 16px; color: #D9DEE8">A toast in Salzburg</figcaption>
+</figure>
+<figure style="min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 12px">
+<img src="images/n_dad.jpg" alt="Brent and a family member at a railing above the Voringsfossen gorge" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 50%; border-radius: 16px">
+<figcaption style="font-size: 16px; color: #D9DEE8">At the edge of Vøringsfossen, Norway</figcaption>
+</figure>
+<figure style="min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 12px">
+<img src="images/n_floyen.jpg" alt="Brent and Paul smiling on a hilltop with Bergen's harbor far below" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 50%; border-radius: 16px">
+<figcaption style="font-size: 16px; color: #D9DEE8">High above the harbor, Bergen</figcaption>
+</figure>
+<figure style="min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 12px">
+<img src="images/ps_night.jpg" alt="Brent, Paul and a friend smiling at night in front of a lit tower and palm trees" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 40%; border-radius: 16px">
+<figcaption style="font-size: 16px; color: #D9DEE8">A night out in the desert, Palm Springs</figcaption>
+</figure>
+</div>
+</div>
+</section>
+
+<section id="shop" style="max-width: 1160px; margin: 0 auto; padding: 80px 24px; display: flex; flex-direction: column; gap: 32px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 800; font-size: 40px; line-height: 1.1; letter-spacing: -0.02em; color: #232D45">From the shop</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
+<article style="flex: 1.4 1 420px; min-width: 0; background: #FFFFFF; border: 1px solid #E7E0D4; border-radius: 20px; padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
+<img src="images/calendar.jpg" alt="Cover of the Under the Hood 2027 wall calendar, The Garage Boys" style="flex: 1 1 240px; min-width: 0; max-width: 320px; width: 100%; height: auto; border-radius: 12px; display: block">
+<div style="flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
+<h3 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 24px; line-height: 1.2; color: #232D45">Under the Hood: The Garage Boys 2027 Wall Calendar</h3>
+<p style="margin: 0; color: #4A5468">12 months. 12 men. One seriously good year. $34.99 on Etsy.</p>
+<a href="https://www.etsy.com/listing/4606905223/under-the-hood-2027-wall-calendar-the" target="_blank" rel="noopener" style="font-weight: 700; font-size: 17px; padding: 10px 0">See it on Etsy</a>
+</div>
+</article>
+<article style="flex: 1 1 300px; min-width: 0; background: #FBEBC8; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 12px; justify-content: center">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#232D45" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9h8v8l-9 9z"></path><circle cx="15.5" cy="8.5" r="1.5"></circle></svg>
+<h3 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 24px; line-height: 1.2; color: #232D45">A little something for travelers</h3>
+<p style="margin: 0; color: #4A5468">Book with Brent and a personalized luggage tag is on its way to you.</p>
+</article>
+</div>
+</section>
+
+<section style="max-width: 1160px; margin: 0 auto; padding: 0 24px 80px">
+<div style="border: 1px solid #CFC6B6; border-radius: 20px; padding: 32px; display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; background: #FFFFFF">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 700; font-size: 26px; line-height: 1.2; color: #232D45">The Inspired HR Lab</h2>
+<p style="margin: 0; color: #4A5468">Mentoring and tools for HR leaders who never stop learning.</p>
+</div>
+<span style="display: inline-block; background: #FAF7F2; border: 1px solid #CFC6B6; color: #232D45; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 16px; border-radius: 999px">Coming soon</span>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border-top: 1px solid #E7E0D4">
+<div style="max-width: 1160px; margin: 0 auto; padding: 72px 24px; display: flex; flex-wrap: wrap; gap: 32px 64px; align-items: center">
+<div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', 'Figtree', sans-serif; font-weight: 800; font-size: 36px; line-height: 1.1; letter-spacing: -0.02em; color: #232D45">Stay in touch</h2>
+<p style="margin: 0; font-size: 18px; color: #4A5468">New stories and trip ideas, straight to your inbox.</p>
+</div>
+<form id="signup-form" action="https://formspree.io/f/xwlowpjq" method="POST" style="flex: 1 1 380px; min-width: 0; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end">
+<input type="hidden" name="_subject" value="New Sharing Joyful Journeys signup">
+<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0">
+<div style="flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<label for="signup-email" style="font-weight: 600; font-size: 15px">Email address</label>
+<input id="signup-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" style="box-sizing: border-box; width: 100%; height: 54px; padding: 0 18px; font: inherit; color: #232D45; background: #FFFFFF; border: 2px solid #8A93A6; border-radius: 12px">
+</div>
+<button id="signup-button" type="submit" style="height: 54px; padding: 0 28px; font: inherit; font-weight: 700; color: #FFFFFF; background: #1F5F73; border: none; border-radius: 12px; cursor: pointer">Sign up</button>
+<p id="signup-status" role="status" aria-live="polite" style="flex: 1 1 100%; margin: 0; min-height: 26px; font-weight: 600; color: #232D45"></p>
+</form>
+</div>
+</section>
+
+<footer style="background: #1A2236; color: #D9DEE8">
+<div style="max-width: 1160px; margin: 0 auto; padding: 32px 24px; display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: center; font-size: 15px">
+<div style="display: flex; align-items: center; gap: 16px">
+<img src="images/logo_sq.png" alt="Sharing Joyful Journeys compass and heart logo" style="display: block; width: 64px; height: 64px; object-fit: cover; border-radius: 50%; background: #FFFFFF">
+<span style="font-family: 'Dancing Script', 'Bricolage Grotesque', cursive; font-weight: 700; font-size: 30px; color: #FFFFFF">Sharing Joyful Journeys</span>
+</div>
+<span>Copyright © 2026 Sharing Joyful Journeys. All rights reserved.</span>
+</div>
+</footer>
+
+</div>
+<script>
+(function(){
+  var form=document.getElementById('signup-form'); if(!form||!window.fetch) return;
+  var status=document.getElementById('signup-status'), button=document.getElementById('signup-button');
+  form.addEventListener('submit',function(e){
+    e.preventDefault(); button.disabled=true; status.textContent='Sending...';
+    fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
+      .then(function(r){ if(!r.ok) throw new Error('bad response'); form.reset(); status.textContent="You're on the list. Thanks for joining the journey!"; })
+      .catch(function(){ status.textContent="That didn't go through. Please try again, or call or text 954-684-8178."; })
+      .then(function(){ button.disabled=false; });
+  });
+})();
+</script>
+</body>
 </html>
